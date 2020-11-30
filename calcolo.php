@@ -41,13 +41,19 @@ class Calc{
         array_push($this->arrayOp, new Operazione('moltiplicazione',$numInput1, $numInput2, $numInput1 * $numInput2));
     }
     public function getRad($numInput1, $numInput2){
-        array_push($this->arrayOp,new Operazione('rediceQuad',$numInput1, $numInput2, sqrt($this->numInput1)));
+        array_push($this->arrayOp,new Operazione('rediceQuad',$numInput1, $numInput2, sqrt($numInput1)));
 
+    }
+    public function getDecbin($numInput1, $numInput2){
+        array_push($this->arrayOp,new Operazione('decbin',$numInput1, $numInput2, decbin($numInput1)));
+    }
+    public function getBindec($numInput1, $numInput2){
+        array_push($this->arrayOp,new Operazione('bindec',$numInput1, $numInput2, bindec($numInput1)));
     }
 
     public function getMostUserOperation(){
         //$most_used = [];
-        $array_counter = ["somma" => 0, "differenza" => 0, "divisione" => 0, "moltiplicazione" => 0, "rediceQuad" => 0];
+        $array_counter = ["somma" => 0, "differenza" => 0, "divisione" => 0, "moltiplicazione" => 0, "rediceQuad" => 0, "decbin" => 0, "bindec" => 0];
         foreach ($this->arrayOp as $operation) {
             //echo"sono nel primo for";
             $array_counter[$operation->nomeOperazione]++;
@@ -61,7 +67,7 @@ class Calc{
 
     public function getLessUserOperation(){
         // $most_used = [];
-        $array_counter = ["somma" => 0, "differenza" => 0, "divisione" => 0, "moltiplicazione" => 0, "rediceQuad" => 0];
+        $array_counter = ["somma" => 0, "differenza" => 0, "divisione" => 0, "moltiplicazione" => 0, "rediceQuad" => 0, "decbin" => 0, "bindec" => 0];
         foreach ($this->arrayOp as $operation) {
             $array_counter[$operation->nomeOperazione]++;
         }
@@ -71,7 +77,7 @@ class Calc{
         return array_keys($array_counter, min($array_counter));
     }
 
-    //---------- elimino la sessione resettando tutto
+    //---------- elimino la sessione resettando tutto -----------//
 
     public function elimino(){
         if($_GET['delete']){
@@ -110,6 +116,10 @@ class Operazione{
                 return 'moltiplicazione '.$this->numero1.' e  '.$this->numero2.' = '.$this->risultato;
             case "rediceQuad":
             return 'rediceQuad '.$this->numero1.' = '.$this->risultato;
+            case "decbin":
+                return 'decbin '.$this->numero1.' = '.$this->risultato;
+            case "bindec":
+                return 'bindec '.$this->numero1.' = '.$this->risultato;
         }
     }
 }
@@ -125,6 +135,8 @@ class Operazione{
     <option value="divisione">divisione</option>
     <option value="moltiplicazione">moltiplicazione</option>
     <option value="rediceQuad">radice quadrata</option>
+    <option value="decbin">decimale a binario</option>
+    <option value="bindec">binario a decimale</option>
 </select>
 <button type="submit" valut="invia">Calcola</button>
 </form>
@@ -160,6 +172,14 @@ if(isset($_POST['operazione'])){
     }else if($_POST['operazione']=='rediceQuad'){
 
         $calc ->getRad($numInput1, $numInput2);
+
+    }else if($_POST['operazione']=='decbin'){
+
+        $calc ->getDecbin($numInput1, $numInput2);
+
+    }else if($_POST['operazione']=='bindec'){
+
+        $calc ->getBindec($numInput1, $numInput2);
 
     }else{
         echo "Devi selezionare un'operazione";
